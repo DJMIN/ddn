@@ -3,7 +3,7 @@ import json
 
 class ListDefaultNone(list):
     def __init__(self, *args, **kwargs):
-        super(ListDefaultNone, self).__init__(*args, **kwargs)
+        super(self.__class__, self).__init__(*args, **kwargs)
 
     def __getitem__(self, y):
         return self._get(y)
@@ -11,8 +11,8 @@ class ListDefaultNone(list):
     def _get(self, y):
         try:
             res = list(self or [])[y]
-            if isinstance(res, (ListDefaultNone, list)):
-                res = ListDefaultNone(res)
+            if isinstance(res, (self.__class__, list)):
+                res = self.__class__(res)
             elif isinstance(res, (DictDefaultNone, dict, type(None))):
                 res = DictDefaultNone(res or {})
             return res
@@ -22,10 +22,22 @@ class ListDefaultNone(list):
 
 class DictDefaultNone(dict):
     def __init__(self, *args, **kwargs):
-        super(DictDefaultNone, self).__init__(*args, **kwargs)
+        super(self.__class__, self).__init__(*args, **kwargs)
 
     def __getitem__(self, y):
         return self._get(y)
+
+    def __str__(self):
+        if not self:
+            return ''
+        return super(dict, self).__str__()
+
+    def __add__(self, other):
+        if isinstance(other, str):
+            return f"{self}{other}"
+        elif isinstance(other, dict):
+            return self | self.__class__(other)
+        raise TypeError(f"unsupported operand type(s) for +: 'DDN' and '{type(other)}'")
 
     def get(self, k, default=None):
         return self._get(k)

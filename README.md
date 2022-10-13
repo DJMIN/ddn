@@ -33,9 +33,13 @@ data = {
 
 d = DDN(data)
 
-if d['data'][1]["key3"]["kkey1"]['kkkey1']:
-    print('ok')
-if d['data'][88]["user"]["username"]['firstname']:
-    print('no')
+if res1 := d['data'][1]["key3"]["kkey1"]['kkkey1']:  # '1234'
+    print('ok', res1)
+if not (res2 := d['data'][88]["user"]["username"]['firstname']):  # ''
+    print('no', res2 + '1234')
+
+print(DDN({13: 1}) + {23: 4})  # {13: 1, 23: 4}
+print(DDN({13: 1}) + '123123', type(DDN({13: 1}) + '123123'))  # {13: 1}123123 <class 'str'>
+
 
 ```
