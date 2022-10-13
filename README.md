@@ -8,38 +8,41 @@ eg.: dict1["k1"]["k2"][0]["k"]
 ```python
 from ddn import DDN
 
+
 data = {
-    "data": [
+    "res": [
         {
-            "key1": "123",
-            "key2": {
-                "kkey1": {
-                    "kkkey1": "1234",
-                    "kkkey2": 12345
-                }
+            'user_info': {
+                "uid": 123,
+                "name": 'sam',
+                'img': '/1.jpg'
             }
         },
         {
-            "key1": "'1234'",
-            "key3": {
-                "kkey1": {
-                    "kkkey1": "1234",
-                    "kkkey2": True
-                }
+            'user_info': {
+                "uid": 1,
+                "name": 'dj'
             }
-        }
+        },
     ]
 }
 
-d = DDN(data)
+data_ddn_format = DDN(data)
 
-if res1 := d['data'][1]["key3"]["kkey1"]['kkkey1']:  # '1234'
-    print('ok', res1)
-if not (res2 := d['data'][88]["user"]["username"]['firstname']):  # ''
-    print('no', res2 + '1234')
+# 例子1：字典取不到key 或者 列表长度不够，则返回空
+print(data_ddn_format['res'][1]['user_info']['name'] + ' lastname')  # 'dj lastname'
+print(data_ddn_format['res'][99]['user_info']['name'])  # ''
 
+# 例子2：取不到key(用户头像链接)，则跳过后续处理
+if img_url := data_ddn_format['res'][0]['user_info']['img']:  # True
+    print("https://a.com/img" + img_url)  # https://a.com/img/1.jpg
+if img_url := data_ddn_format['res'][1]['user_info']['img']:  # False
+        print("https://a.com/img" + img_url)  # if None 这行代码不执行
+
+# 例子3：字典可以相加，或者与字符串相加表现和javascript一致
 print(DDN({13: 1}) + {23: 4})  # {13: 1, 23: 4}
-print(DDN({13: 1}) + '123123', type(DDN({13: 1}) + '123123'))  # {13: 1}123123 <class 'str'>
+tmp = DDN({13: 1}) + '123123'
+print(tmp, type(tmp))  # {13: 1}123123 <class 'str'>
 
 
 ```

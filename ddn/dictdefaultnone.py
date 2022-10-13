@@ -33,7 +33,7 @@ class DictDefaultNone(dict):
         return super(dict, self).__str__()
 
     def __add__(self, other):
-        if isinstance(other, str):
+        if isinstance(other, (str, int, float, bytes)):
             return f"{self}{other}"
         elif isinstance(other, dict):
             return self | self.__class__(other)
@@ -89,5 +89,4 @@ if __name__ == '__main__':
     # print(data1['data'][1]["key3"]["kkey1"])
     # print(data1['data'][1]["key3"]["kkey1"]['kkkey2'])
     print(data1['data'][1]["key265"]['151'])
-
 
